@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using ProductModel.CSVMapping;
 
 namespace ProductModel
 {
@@ -13,6 +14,9 @@ namespace ProductModel
          public DbSet<Product> Products { get; set; }
 
         public DbSet<Supplier> Suppliers { get; set; }
+
+        public DbSet<GRN> GRNs { get; set; }
+        public DbSet<GrnLine> GRNLines { get; set; }
 
 
         static public bool inProduction;
@@ -46,6 +50,12 @@ namespace ProductModel
             {
                 Product[] products = DBHelper.Get<Product>(@"..\Week8ProductModelS00238716\Products.csv").ToArray();
                 modelBuilder.Entity<Product>().HasData(products);
+
+                GRN[] grns = DBHelper.GetFile<GRN, GrnMap>(@"..\Week8ProductModelS00238716\GRNs.csv").ToArray();
+                modelBuilder.Entity<GRN>().HasData(grns);
+
+                GrnLine[] grnLines = DBHelper.GetFile<GrnLine, GrnLineMap>(@"..\Week8ProductModelS00238716\GRNlines.csv").ToArray();
+                modelBuilder.Entity<GrnLine>().HasData(grnLines);
             }
             //modelBuilder.Entity<Product>().HasData(
             // new Product

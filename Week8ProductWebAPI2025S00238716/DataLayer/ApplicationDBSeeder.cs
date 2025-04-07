@@ -25,22 +25,36 @@ namespace ProductWebAPI2025.DataLayer
             Random r = new Random();
             if (_ctx.Users.Count() == 0)
             {
-                List<ApplicationUser> UserSeeds = new List<ApplicationUser> {
-                            new ApplicationUser
-                                {
-                                    FirstName = "Paul",
-                                    SecondName = "Powell",
-                                    UserName = "paul.powell@atu.ie",
-                                    Email = "paul.powell@atu.ie",
-                                    EmailConfirmed = true,
-                                    SecurityStamp = Guid.NewGuid().ToString()
-                                },
-                            };
+                List<ApplicationUser> UserSeeds = new List<ApplicationUser>
+                {
+                    new ApplicationUser
+                    {
+                        FirstName = "Paul",
+                        SecondName = "Powell",
+                        UserName = "paul.powell@atu.ie",
+                        Email = "paul.powell@atu.ie",
+                        EmailConfirmed = true,
+                        SecurityStamp = Guid.NewGuid().ToString()
+                    },
+                    new ApplicationUser
+                    {
+                        FirstName = "Rosaleen",
+                        SecondName = "Durkin",
+                        UserName = "Durkin.Rosaleen@itsligo.ie",
+                        Email = "Durkin.Rosaleen@itsligo.ie",
+                        EmailConfirmed = true,
+                        SecurityStamp = Guid.NewGuid().ToString()
+                    }
+
+            };
+              
+
                
                 // Create all Users with the same password
                 foreach (ApplicationUser user in UserSeeds)
                 {
-                    var result = await _userManager.CreateAsync(user, "Rad302$1");
+                    // change password to match rosaleens
+                    var result = await _userManager.CreateAsync(user, "P@ssword!");
 
                     if (result != IdentityResult.Success)
                     {
@@ -51,11 +65,23 @@ namespace ProductWebAPI2025.DataLayer
 
                
             }
-            if (_ctx.Roles.Count() < 1)
+
+            // update : if role doesnt exist, create it
+            if (!_ctx.Roles.Any())
             {
-                await _roleManager.CreateAsync(
-                    new IdentityRole { Id = Guid.NewGuid().ToString(), 
-                        Name = "Sales Manager" });
+                await _roleManager.CreateAsync(new IdentityRole
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Sales Manager"
+                });
+
+                await _roleManager.CreateAsync(new IdentityRole
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Store Manager"
+                });
+
+                _ctx.SaveChanges();
             }
             
             _ctx.SaveChanges();
@@ -75,6 +101,25 @@ namespace ProductWebAPI2025.DataLayer
 
                 }
             }
+
+            // add the role
+            ApplicationUser rdurkin = await _userManager.FindByNameAsync("Durkin.Rosaleen@itsligo.ie");
+            if (rdurkin != null)
+            {
+
+                var roles = await _userManager.GetRolesAsync(rdurkin);
+                if (roles.Count < 1)
+                {
+                    var result = await _userManager.AddToRoleAsync(rdurkin, "Store Manager");
+                    if (result != IdentityResult.Success)
+                    {
+                        throw new InvalidOperationException("Could add user to store manager Role");
+                    }
+
+                }
+            }
+
+
             _ctx.SaveChanges();
 
         }

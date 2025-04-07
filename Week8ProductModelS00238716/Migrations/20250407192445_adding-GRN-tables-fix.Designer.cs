@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductModel;
 
@@ -11,9 +12,11 @@ using ProductModel;
 namespace ProductModel.Migrations
 {
     [DbContext(typeof(ProductDBContext))]
-    partial class ProductDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250407192445_adding-GRN-tables-fix")]
+    partial class addingGRNtablesfix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,21 +45,6 @@ namespace ProductModel.Migrations
                     b.HasKey("GrnID");
 
                     b.ToTable("GRNs");
-
-                    b.HasData(
-                        new
-                        {
-                            GrnID = 1,
-                            DeliveryDate = new DateTime(2022, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            OrderDate = new DateTime(2022, 2, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StockUpdated = false
-                        },
-                        new
-                        {
-                            GrnID = 2,
-                            OrderDate = new DateTime(2022, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StockUpdated = false
-                        });
                 });
 
             modelBuilder.Entity("ProductModel.GrnLine", b =>
@@ -83,36 +71,6 @@ namespace ProductModel.Migrations
                     b.HasIndex("StockID");
 
                     b.ToTable("GRNLines");
-
-                    b.HasData(
-                        new
-                        {
-                            LineID = 1,
-                            GrnID = 1,
-                            QtyDelivered = 20,
-                            StockID = 1
-                        },
-                        new
-                        {
-                            LineID = 2,
-                            GrnID = 1,
-                            QtyDelivered = 40,
-                            StockID = 2
-                        },
-                        new
-                        {
-                            LineID = 3,
-                            GrnID = 1,
-                            QtyDelivered = 70,
-                            StockID = 3
-                        },
-                        new
-                        {
-                            LineID = 4,
-                            GrnID = 2,
-                            QtyDelivered = 20,
-                            StockID = 9
-                        });
                 });
 
             modelBuilder.Entity("ProductModel.Product", b =>

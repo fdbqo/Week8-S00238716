@@ -5,10 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="GRNlines.csv" />
+    <None Remove="GRNs.csv" />
+    <None Remove="Products.csv" />
     <None Remove="Supplier.csv" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="GRNlines.csv" />
+    <EmbeddedResource Include="GRNs.csv" />
+    <EmbeddedResource Include="Products.csv" />
     <EmbeddedResource Include="Supplier.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
