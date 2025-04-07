@@ -57,6 +57,7 @@ namespace ProductModel
             //     StockOnHand = 30,
             //     UnitPrice = 10
             // });
+            //
 
             base.OnModelCreating(modelBuilder);
         }
