@@ -21,21 +21,12 @@ namespace ProductWebAPI2025.DataLayer
         }
         public async Task Seed()
         {
-            // Seed the Main User
+            // Seed the Main User -- modifed after ppowel was already created by accident, so durkin can still be created
             Random r = new Random();
             if (_ctx.Users.Count() == 0)
             {
                 List<ApplicationUser> UserSeeds = new List<ApplicationUser>
                 {
-                    new ApplicationUser
-                    {
-                        FirstName = "Paul",
-                        SecondName = "Powell",
-                        UserName = "paul.powell@atu.ie",
-                        Email = "paul.powell@atu.ie",
-                        EmailConfirmed = true,
-                        SecurityStamp = Guid.NewGuid().ToString()
-                    },
                     new ApplicationUser
                     {
                         FirstName = "Rosaleen",
@@ -47,6 +38,8 @@ namespace ProductWebAPI2025.DataLayer
                     }
 
             };
+
+
               
 
                
@@ -54,7 +47,7 @@ namespace ProductWebAPI2025.DataLayer
                 foreach (ApplicationUser user in UserSeeds)
                 {
                     // change password to match rosaleens
-                    var result = await _userManager.CreateAsync(user, "P@ssword!");
+                    var result = await _userManager.CreateAsync(user, "P@ssword1!");
 
                     if (result != IdentityResult.Success)
                     {
@@ -66,24 +59,17 @@ namespace ProductWebAPI2025.DataLayer
                
             }
 
-            // update : if role doesnt exist, create it
-            if (!_ctx.Roles.Any())
+            // update : if role doesnt exist, create it (updated because i was getting role creation issues)
+            if (!await _roleManager.RoleExistsAsync("Sales Manager"))
             {
-                await _roleManager.CreateAsync(new IdentityRole
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "Sales Manager"
-                });
-
-                await _roleManager.CreateAsync(new IdentityRole
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "Store Manager"
-                });
-
-                _ctx.SaveChanges();
+                await _roleManager.CreateAsync(new IdentityRole("Sales Manager"));
             }
-            
+
+            if (!await _roleManager.RoleExistsAsync("Store Manager"))
+            {
+                await _roleManager.CreateAsync(new IdentityRole("Store Manager"));
+            }
+
             _ctx.SaveChanges();
 
             ApplicationUser ppowell = await _userManager.FindByNameAsync("paul.powell@atu.ie");

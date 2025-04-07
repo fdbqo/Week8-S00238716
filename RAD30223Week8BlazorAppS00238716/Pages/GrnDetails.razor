@@ -1,0 +1,38 @@
+﻿@page "/grn/{Id:int}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<h3>GRN Details</h3>
+
+@if (GRN == null)
+{
+    <p>Loading GRN data...</p>
+}
+else
+{
+    <p><strong>GRN ID:</strong> @GRN.GrnID</p>
+    <p><strong>Order Date:</strong> @GRN.OrderDate.ToShortDateString()</p>
+    <p><strong>Delivery Date:</strong> @GRN.DeliveryDate?.ToShortDateString()</p>
+    <p><strong>Stock Updated:</strong> @GRN.StockUpdated</p>
+
+    <h4>Delivery Lines</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Line ID</th>
+            <th>Product</th>
+            <th>Qty Delivered</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var line in GRN.GRNLines)
+        {
+            <tr>
+                <td>@line.LineID</td>
+                <td>@line.associatedProduct?.Description</td>
+                <td>@line.QtyDelivered</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

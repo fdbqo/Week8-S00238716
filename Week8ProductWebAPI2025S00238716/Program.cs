@@ -17,7 +17,7 @@ namespace ProductWebAPI2025
         public static void Main(string[] args)
         {
 
-            ActivityAPIClient.Track(StudentID: "S00238716", StudentName: "Finn De Bie", activityName: "RAD30223 Week 8 Lab 1", Task: "Testing grn controller actions");
+            ActivityAPIClient.Track(StudentID: "S00238716", StudentName: "Finn De Bie", activityName: "RAD30223 Week 8 Lab 1", Task: "implementing Blazor GRN components");
 
             // For CORS on localhost
             string LocalAllowSpecificOrigins = "_localAllowSpecificOrigins";
@@ -25,7 +25,7 @@ namespace ProductWebAPI2025
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            //builder.Services.AddDbContext<ProductDBContext>();
+            //builder.Services.AddDbContext<ProductDBContext>(); 
             
             var connectionString = builder.Configuration.GetConnectionString("IdentityModelConnection") 
                 ?? throw new InvalidOperationException("Connection string 'IdentityModelConnection' not found.");
@@ -71,7 +71,7 @@ namespace ProductWebAPI2025
                                   builder =>
                                   {
                                       // current Blazor localhost endpoints See launchSettings.json in Blazor app
-                                      builder.WithOrigins("https://localhost:7104",
+                                      builder.WithOrigins("https://localhost:7042",
                                                           "http://localhost:30571",
                                                           "http://localhost:5152")
                                                             .AllowAnyHeader()
