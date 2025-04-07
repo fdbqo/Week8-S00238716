@@ -17,7 +17,7 @@ namespace ProductWebAPI2025
         public static void Main(string[] args)
         {
 
-            ActivityAPIClient.Track(StudentID: "S00238716", StudentName: "Finn De Bie", activityName: "RAD30223 Week 8 Lab 1", Task: "Running Web API");
+            ActivityAPIClient.Track(StudentID: "S00238716", StudentName: "Finn De Bie", activityName: "RAD30223 Week 8 Lab 1", Task: "Testing grn controller actions");
 
             // For CORS on localhost
             string LocalAllowSpecificOrigins = "_localAllowSpecificOrigins";
@@ -37,6 +37,9 @@ namespace ProductWebAPI2025
             builder.Services.AddDbContext<ProductDBContext>(options =>
             //New Target assembly directive for migrations
                 options.UseSqlServer(buisnessConnectionString, b => b.MigrationsAssembly("ProductModel")));
+
+            // adding out grn repo 
+            builder.Services.AddScoped<IGRN<GRN>, GRNRepository>();
 
             builder.Services.AddTransient<IProduct<Product>, ProductRepository>();
 
@@ -75,7 +78,14 @@ namespace ProductWebAPI2025
                                                             .AllowAnyMethod();
                                   });
             });
-            builder.Services.AddControllers();
+            // i used an online resource to add this as I was getting a 'possible object cycle' error, possibly due to a previous error
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                    options.JsonSerializerOptions.WriteIndented = true;
+                });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen( c =>
